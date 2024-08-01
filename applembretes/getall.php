@@ -14,10 +14,10 @@ if ($metodo==="GET"){
 
         foreach ($dados as $linha) {
 
-            $array['result'] = [
+            $array['result'] []= [
                 "id"=>$linha['idLembrete'],
                 "titulo"=>$linha['tituloLembrete']
-            ]
+            ];
         }
 
 
