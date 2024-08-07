@@ -12,9 +12,9 @@ if ($metodo==='POST') {
  
     if ($titulo && $corpo) {
  
-        $sql=$pdo->prepare("INSERT INTO lembrete (tituloLembrete,corpoLembrete) VALUES (:titulo,:corpo)");
-        $sql->bindValue(':titulo',$titulo);
-        $sql->bindValue(':corpo',$corpo);
+        $sql=$pdo->prepare("INSERT INTO lembrete (tituloLembrete,corpoLembrete) VALUES (:titulo, :corpo)");
+        $sql->bindValue(":titulo",$titulo);
+        $sql->bindValue(":corpo",$corpo);
         $sql->execute();
         $id = $pdo->lastInsertId();
 
