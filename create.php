@@ -1,7 +1,11 @@
 
 <?php
+
  
 require('./config.php');
+
+use Applembretes\Models\Lembrete;
+use Applembretes\Dao\LembreteDaoMySql;
  
 $metodo= strtoupper($_SERVER['REQUEST_METHOD']);
  
@@ -12,18 +16,20 @@ if ($metodo==='POST') {
  
     if ($titulo && $corpo) {
  
-        $sql=$pdo->prepare("INSERT INTO lembrete (tituloLembrete,corpoLembrete) VALUES (:titulo, :corpo)");
-        $sql->bindValue(":titulo",$titulo);
-        $sql->bindValue(":corpo",$corpo);
-        $sql->execute();
-        $id = $pdo->lastInsertId();
+       $meuLembrete = new Lembrete(null,$titulo,$corpo);
+       $meuLembreteDAOMySql = new LembreteDAOMySql($pdo);
+       $novoLembrete=$meuLembreteDAOMySql->addLembrete($meuLembrete);
 
-        $array['result'] = [
-            "id" => $id,
-            "tituloLembrete" => $titulo,
-            "corpoLembrete" => $corpo
-        ];
- 
+       $array['result'] = [
+
+        "id" => $novoLembrete->getId(),
+        "tituloLembrete" => $novoLembrete->getTitulo(),
+        "corpoLembrete" => $novoLembrete->getCorpo()
+       ];
+        
+
+
+
  
     } else {
         $array['error'] = 'Erro: Valores nulos ou inválidos';

@@ -1,6 +1,8 @@
 <?php
  
 require('./config.php');
+
+use Applembretes\Dao\LembreteDaoMySql;
  
 $metodo= strtoupper($_SERVER['REQUEST_METHOD']);
  
@@ -19,10 +21,11 @@ if ($metodo==='DELETE') {
             $sql->execute();
    
             if ($sql->rowCount()>0) {
+
+                $meuLembreteDAOMySql = new LembreteDAOMySql($pdo);
+                $meuLembreteDAOMySql->removeLembrete($id);
+
        
-                $sql = $pdo->prepare("DELETE FROM lembrete WHERE idLembrete=:id");
-                $sql->bindValue(":id", $id);
-                $sql->execute();
                
                 $array['result']='Item excluído com sucesso!';
  

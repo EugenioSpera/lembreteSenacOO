@@ -1,6 +1,9 @@
 <?php
 
-require ('./config.php');
+require('./config.php');
+
+use Applembretes\Models\Lembrete;
+use Applembretes\Dao\LembreteDaoMySql;
 
 $metodo = strtoupper($_SERVER['REQUEST_METHOD']);
 
@@ -12,32 +15,32 @@ if ($metodo === 'PUT') {
     $titulo = $put['titulo'] ?? null;
     $corpo = $put['corpo'] ?? null;
 
-    $id = filter_var($id,FILTER_VALIDATE_INT);
-    $titulo = filter_var($titulo,FILTER_SANITIZE_FULL_SPECIAL_CHARS); //sanitize limpa o codigo, não mostrando os caracteres especiais 
-    $corpo = filter_var($corpo,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+    $titulo = filter_var($titulo, FILTER_SANITIZE_FULL_SPECIAL_CHARS); //sanitize limpa o codigo, não mostrando os caracteres especiais 
+    $corpo = filter_var($corpo, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if ($id && $titulo && $corpo) {
 
         $sql = $pdo->prepare("SELECT * FROM lembrete WHERE idLembrete=:id.");
-        $sql->bindValue(":id", $id);        
+        $sql->bindValue(":id", $id);
         $sql->execute();
 
-        if ($sql->rowCount()>0) {
-            
+        if ($sql->rowCount() > 0) {
+
             $sql = $pdo->prepare("UPDATE lembrete SET tituloLembrete=:titulo, corpoLembrete=:corpo WHERE idLembrete=:id");
 
-            
 
-        $sql->bindValue(":id", $id);
-        $sql->bindValue(":titulo", $titulo);
-        $sql->bindValue(":corpo", $corpo);
-        $sql->execute();
 
-        $array['result']= [
-            "id" => $id,
-            "tituloLembrete" => $titulo,
-            "corpoLembrete" => $corpo
-        ];
+            $sql->bindValue(":id", $id);
+            $sql->bindValue(":titulo", $titulo);
+            $sql->bindValue(":corpo", $corpo);
+            $sql->execute();
+
+            $array['result'] = [
+                "id" => $novoLembrete->getId(),
+                "tituloLembrete" => $novoLembrete->getTitulo(),
+                "corpoLembrete" => $novoLembrete->getCorpo()
+            ];
 
 
         } else {
@@ -54,7 +57,7 @@ if ($metodo === 'PUT') {
     $array['error'] = "Erro: Ação inválida - método permitido apenas PUT";
 }
 
-require ('./return.php');
+require('./return.php');
 
 
 ?>
